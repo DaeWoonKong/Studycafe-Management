@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h5 class="my-3 border-bottom pb-3" style="font-family: Arial, Helvetica, sans-serif; font-weight: bolder;">좌석등록</h5>
+    <form method="post" class="post-form my-3" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- 오류 표시 Start -->
+        {% if form.errors %}
+            <div class="alert alert-danger" role="alert" style="background-color: lightcoral; color:navy; border-color: black;">
+            {% for field in form %}
+                {% if field.errors %}
+                <strong>{{ field.label }}</strong>
+                {{ field.errors }}
+                {% endif %}
+            {% endfor %}
+            </div>
+        {% endif %}
+        <!-- 오류 표시 End -->
+        <div class="form-group">
+            <label for="scode" style="font-size: large; font-family: 'Times New Roman', Times, serif; font-weight: bold;">좌석코드</label>
+            <input type="text" class="form-control" name="scode" id="scode" style="border-color:cornflowerblue; background-color: antiquewhite;">
+        </div>
+        <div class="form-group">
+            <label for="scondition" style="font-size: large; font-family: 'Times New Roman', Times, serif; font-weight: bold;">좌석상태</label>
+            <textarea class="form-control" name="scondition" id="scondition" style="border-color:cornflowerblue; background-color: antiquewhite;">
+                {{ form.scondition.value|default_if_none:'' }}
+            </textarea>
+        </div>
+        <div class="form-group">
+            <label for="unitprice" style="font-size: large; font-family: 'Times New Roman', Times, serif; font-weight: bold;">시간당 대여료</label>
+            <input type="text" class="form-control" name="unitprice" id="unitprice" value="{{ form.subject.value|default_if_none:'' }}" style="border-color:cornflowerblue; background-color: antiquewhite;">
+        </div>
+        <div class="form-group">
+            <label for="discountrate" style="font-size: large; font-family: 'Times New Roman', Times, serif; font-weight: bold;">할인율</label>
+            <input type="text" class="form-control" name="discountrate" id="discountrate" value="{{ form.subject.value|default_if_none:'' }}" style="border-color:cornflowerblue; background-color: antiquewhite;">
+        </div>
+        <div class="form-inline">
+            <label for="imgfile" class="col-sm-2" style="font-size: large; font-family: 'Times New Roman', Times, serif; font-weight: bold;">좌석 위치</label>
+            <input type="file"  name="imgfile" id="imgfile">
+        </div>
+        <button type="submit" class="btn btn-primary" style="float: right; background-color: darkturquoise; color:honeydew; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">저장하기</button>
+    </form>
+</div>
+{% endblock %}

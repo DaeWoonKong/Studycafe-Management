@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <table class="table">
+        <thead>
+        <tr class="text-center thead-light" style="font-size: large; font-style: oblique;">
+            <th>좌석코드</th>
+            <th>좌석상태</th>
+            <th>시간당 대여료</th>
+            <th>할인율</th>
+            <th>좌석 위치</th>
+            <th>관리자</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if seat_list %}
+        {% for seat in seat_list %}
+        <tr class="text-center" style="background-color:cornsilk; font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+            <td>
+                <a href="{% url 'sales:detail' seat.id %}">
+                    {{ seat.scode}}
+                </a>
+            </td>
+            <td>
+                <a>
+                    {{ seat.scondition}}
+                </a>
+            </td>
+            <td>
+                <a>
+                    {{ seat.unitprice}}
+                </a>
+            </td>
+            <td>
+                <a>
+                    {{ seat.discountrate}}
+                </a>
+            </td>
+            <td class="text-truncate" style="max-width: 10px">
+                {% if seat.imgfile == '' or seat.imgfile == null %}
+                {% else %}
+                <span class="badge badge-secondary py-2">
+                    {{ seat.imgfile }}
+                </span>
+                {% endif %}
+            </td>
+            <td>
+                <a>
+                    {{ seat.author.username }}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">좌석이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <!-- 페이징 처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전 페이지 -->
+        {% if seat_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ seat_list.previous_page_number }}">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지 리스트 -->
+        {% for page_number in seat_list.paginator.page_range %}
+            {% if page_number >= seat_list.number|add:-5 and page_number <= seat_list.number|add:5 %}
+                {% if page_number == seat_list.number %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        <!-- 다음 페이지 -->
+        {% if seat_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ seat_list.next_page_number }}">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징 처리 끝 -->
+    <a href="{% url 'sales:seat_create' %}" class="btn btn-primary btn-outline-secondary" style="float: right; background-color: darkturquoise; color:honeydew; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+        좌석등록
+    </a>
+</div>
+{% endblock %}
